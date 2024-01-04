@@ -1,11 +1,11 @@
 #ifndef __ADDRESSBOOK_H_
 #define __ADDRESSBOOK_H_
 
-#include "DoubleLinkListQueue.h"
+#include "balanceBinarySearchTree.h"
 #include "common.h"
 
-typedef DoubleLinkList addressBookList;
-typedef DoubleLinkNode addressBookNode;
+typedef BalanceBinarySearchTree addressBookList;
+typedef AVLTreeNode addressBookNode;
 
 
 

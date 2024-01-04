@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "addressBook.h"
 
+#define 
 
 //通讯录结构体
 typedef struct addressBook
