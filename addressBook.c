@@ -38,7 +38,7 @@ int addressBookmodifica(addressBookList *pBook, ELEMENTTYPE data)
 }
 
 //排序
-int addressBooksort(addressBook *pBook, ELEMENTTYPE data, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE))
+int addressBooksort(addressBookList *pBook, ELEMENTTYPE data, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE))
 {
     int ret = 0;
 
@@ -47,7 +47,7 @@ int addressBooksort(addressBook *pBook, ELEMENTTYPE data, int (*compareFunc)(ELE
 }
 
 //顺序遍历
-int addressBook (addressBook *pBook, int (*printFunc)(ELEMENTTYPE))
+int addressBook (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
 {
     int ret = 0;
 
