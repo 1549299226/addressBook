@@ -1,15 +1,29 @@
 #ifndef __ADDRESSBOOK_H_
 #define __ADDRESSBOOK_H_
 
-#include "balanceBinarySearchTree.h"
-#include "common.h"
+#include "balanceBinarySearchTree .h"
+#define NAME_NUMBER 20
+#define TELEPHONE_NUMBER 11
+#define EMAIL_NUMBER 30
+#define ADDRESS_NUMBER 100
+#define OCCUPATION_NUMBER 30
 
 typedef BalanceBinarySearchTree addressBookList;
 typedef AVLTreeNode addressBookNode;
 
+typedef struct addressBookInfo
+{
+    char name[NAME_NUMBER];
+    char sex;
+    int telephone[TELEPHONE_NUMBER];
+    char email[EMAIL_NUMBER];
+    char address[ADDRESS_NUMBER];
+    char occupation[OCCUPATION_NUMBER];
 
+} addressBookInfo;
 
-
+//创建人员信息
+addressBookInfo *createPersonInfo(char *name, char *sex,  int telephone, char *email, char *address, char *occupation);
 
 //插入人员信息
 int addressBookInsert(addressBookList *pBook, ELEMENTTYPE data);
@@ -27,7 +41,7 @@ int addressBookmodifica(addressBookList *pBook, ELEMENTTYPE data);
 int addressBooksort(addressBookList *pBook, ELEMENTTYPE data, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE));
 
 //顺序遍历
-int addressBook (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));
+int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));
 
 
 

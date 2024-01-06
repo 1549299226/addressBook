@@ -1,11 +1,26 @@
 #include <stdio.h>
 #include "addressBook.h"
+#include<stdlib.h>
 
-//插入人员信息
+
+
+enum STATUS_CODE
+{
+    NOT_FIND = -1,
+    ON_SUCCESS,
+    NULL_PTR,
+    MALLOC_ERROR,
+    INVALID_ACCESS,
+};
+
+
+
+// 插入人员信息
 int addressBookInsert(addressBookList *pBook, ELEMENTTYPE data)
 {
     int ret = 0;
 
+    //balanceBinarySearchTreeInsert(&pBook, (void**)&data);
 
     return 0;
 }
@@ -47,7 +62,7 @@ int addressBooksort(addressBookList *pBook, ELEMENTTYPE data, int (*compareFunc)
 }
 
 //顺序遍历
-int addressBook (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
+int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
 {
     int ret = 0;
 

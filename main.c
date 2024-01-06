@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "addressBook.h"
 
-#define 
 
 //通讯录结构体
 typedef struct addressBook
@@ -25,10 +24,11 @@ int compareFunc(void *arg1, void *arg2)
 //自定义打印
 int printStruct(void *arg)
 {
-    
+    int ret = 0;
     addressBook* info = (addressBook*)arg;
-    printf("name:%s\tsex:%c\ttelephone:%s\temail:%s\taddress:%s\toccupation:%s\t", 
-             info->name, info->telephone, info->email, info->address, info->occupation);
+    printf("name:%s\tsex:%c\ttelephone:%s\temail:%s\taddress:%s\toccupation:%s\n", 
+             info->name, info->sex, info->telephone, info->email, info->address, info->occupation);
+    return ret;
 }
 
 int main()
