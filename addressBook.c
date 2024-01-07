@@ -54,6 +54,8 @@ addressBookInfo *createPersonInfo(addressBookInfo *data, char *name, char *sex, 
     strncpy(data->telephone, telephone, TELEPHONE_NUMBER);
     strncpy(data->occupation, occupation, OCCUPATION_NUMBER);
     strncpy(&data->sex, sex, sizeof(data->sex));
+    
+    
 }
 
 /* 插入人员信息 */
@@ -171,6 +173,7 @@ int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data)
     return 0;
 }
 
+#if 0
 //修改人员信息
 int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
 {
@@ -252,7 +255,7 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
 
     return 0;
 }
-
+#endif
 //顺序遍历
 int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
 {

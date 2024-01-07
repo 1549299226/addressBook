@@ -56,10 +56,9 @@ int printStruct(void *arg)
 int main()
 {
     addressBookList *List;
-    addressBookInfo * Info;
-    addressBookInfo **buffer = malloc(sizeof (addressBookInfo) * BUFFER_SIZE);
-    memset(&buffer, 0, sizeof (addressBookInfo) * BUFFER_SIZE);
-    createPersonInfo(Info,Info->name, &Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
+    // addressBookInfo * Info;
+    // addressBookInfo **buffer = malloc(sizeof (addressBookInfo) * BUFFER_SIZE);
+    
     balanceBinarySearchTreeInit(&List,CompareName,printStruct);
     /* 功能选项打印 */
     {
@@ -80,20 +79,20 @@ int main()
     /* 功能选择 */   
     {
         int choice = 0;    
-        int count = 0;    
-        while ( choice != QUIT)
+        //int count = 0;    
+        while ( choice <= QUIT && choice >= 0)
         {
             printf("请输入选项\n");
             scanf("%d", &choice);
             switch (choice)
             {
             case BUILT:
-
-                        addressBookInsert(List, Info);
-                        *buffer[count] = *(Info++);
-                        count++;
+                    addressBookInfo * Info;
+                    createPersonInfo(Info,Info->name, &Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
+                    addressBookInsert(List, Info);
+                    Info++;
                 // choice = DELETE;
-                break;
+            break;
             case SEEK:                   
                         //addressBookSelect(List, Info);
                         addressBookOrderTravel(List, printStruct);
@@ -101,7 +100,7 @@ int main()
                 break;
             case DELETE:
                         addressBookDelete(List, Info);
-                        count--;
+                        //count--;
                         if (List->root->left == NULL &&List->root->right == NULL)
                         {
                             printf("通讯录没有人员\n");
