@@ -23,22 +23,19 @@ typedef struct addressBookInfo
 } addressBookInfo;
 
 //创建人员信息
-addressBookInfo *createPersonInfo(char *name, char *sex,  char * telephone, char *email, char *address, char *occupation);
+addressBookInfo *createPersonInfo(addressBookInfo *data,char *name, char *sex,  char * telephone, char *email, char *address, char *occupation);
 
 //插入人员信息
-int addressBookInsert(addressBookList *pBook);
+int addressBookInsert(addressBookList *pBook, addressBookInfo* data);
 
 //查看人员信息
-int addressBookSelect(addressBookList *pBook, ELEMENTTYPE data);
+int addressBookSelect(addressBookList *pBook,  ELEMENTTYPE data);
 
 //删除人员信息
 int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data);
 
 //修改人员信息
 int addressBookmodifica(addressBookList *pBook, ELEMENTTYPE data);
-
-//排序
-int addressBooksort(addressBookList *pBook, ELEMENTTYPE data, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE));
 
 //顺序遍历
 int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));

@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include "addressBook.h"
+#include <stdlib.h>
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<fcntl.h>
 #include<unistd.h>
 #include<string.h>
+#include "addressBook.h"
 #include"balanceBinarySearchTree .h"
 #define BUFFER_SIZE 1024
 
@@ -22,6 +23,7 @@
 
 enum SECLET
 {
+
     BUILT = 1,
     SEEK,
     DELETE,
@@ -33,9 +35,10 @@ int CompareName(void *arg1, void *arg2)
 {
     addressBookInfo *idx1 = (addressBookInfo *) arg1;
     addressBookInfo *idx2 = (addressBookInfo *) arg2;
-
+    // char * idx1 = (char *)arg1;
+    // char * idx2 = (char *)arg2;
     int result = 0;
-    result = strcmp(idx1->name,idx2->name);
+    result = strcmp(idx1->name, idx2->name);
 
     return result;
 }
@@ -53,6 +56,10 @@ int printStruct(void *arg)
 int main()
 {
     addressBookList *List;
+    addressBookInfo * Info;
+    addressBookInfo **buffer = malloc(sizeof (addressBookInfo) * BUFFER_SIZE);
+    memset(&buffer, 0, sizeof (addressBookInfo) * BUFFER_SIZE);
+    createPersonInfo(Info,Info->name, &Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
     balanceBinarySearchTreeInit(&List,CompareName,printStruct);
     /* 功能选项打印 */
     {
@@ -72,24 +79,44 @@ int main()
 
     /* 功能选择 */   
     {
-        printf("请输入选项\n");
-        int choice = 0;
-        scanf("%d", &choice);
-        switch (choice)
+        int choice = 0;    
+        int count = 0;    
+        while ( choice != QUIT)
         {
-        case BUILT:
-                    addressBookInsert(List);
-            break;
-        case SEEK:
-            break;
-        case DELETE:
-            break;
-        case MODIFY:
-            break;
-        case QUIT:
-            break;
-        default:
-            break;
+            printf("请输入选项\n");
+            scanf("%d", &choice);
+            switch (choice)
+            {
+            case BUILT:
+
+                        addressBookInsert(List, Info);
+                        *buffer[count] = *(Info++);
+                        count++;
+                // choice = DELETE;
+                break;
+            case SEEK:                   
+                        //addressBookSelect(List, Info);
+                        addressBookOrderTravel(List, printStruct);
+                //choice = 0;
+                break;
+            case DELETE:
+                        addressBookDelete(List, Info);
+                        count--;
+                        if (List->root->left == NULL &&List->root->right == NULL)
+                        {
+                            printf("通讯录没有人员\n");
+                            return 0;
+                        }
+                        
+                break;
+            case MODIFY:
+                break;
+            case QUIT:
+                break;
+            default:
+                choice = QUIT;
+                break;
+            }
         }
     }
 
