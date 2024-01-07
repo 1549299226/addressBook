@@ -28,6 +28,7 @@ enum SECLET
     SEEK,
     DELETE,
     MODIFY,
+    VIEW_ALL,
     QUIT
 };
 
@@ -89,17 +90,31 @@ int main()
             case BUILT:
                     addressBookInfo * Info;
                     createPersonInfo(Info,Info->name, &Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
+                    createPersonInfo(Info, Info->name, Info->telephone, &Info->sex, Info->address, Info->occupation, Info->email);
+                    printf("请输入姓名\n");
+                    scanf("%s", Info->name);
+                    printf("请输入电话号码\n");
+                    scanf("%s",  Info->telephone);
+                    printf("请输入性别\n");
+                    scanf("%s",  &Info->sex);
+                    printf("请输入地址\n");
+                    scanf("%s", Info->address);
+                    printf("请输入工作\n");
+                    scanf("%s", Info->occupation);
+                    printf("请输入邮箱\n");
+                    scanf("%s", Info->email);
                     addressBookInsert(List, Info);
                     Info++;
                 // choice = DELETE;
             break;
             case SEEK:                   
                         addressBookSelect(List, Info);
-                        // addressBookOrderTravel(List, printStruct);
                 //choice = 0;
                 break;
             case DELETE:
-                        addressBookDelete(List, Info);
+                        printf("请输入需要删除的联系人姓名\n");
+                        scanf("%s", Info->name);
+                        addressBookDelete(List, Info, Info->name);
                         //count--;
                         if (List->root->left == NULL &&List->root->right == NULL)
                         {
@@ -109,8 +124,10 @@ int main()
                         
                 break;
             case MODIFY:
+                        addressBookmodifica(List, Info);
                 break;
-            case QUIT:
+            case VIEW_ALL:
+                        addressBookOrderTravel(List, printStruct);
                 break;
             default:
                 choice = QUIT;

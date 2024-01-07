@@ -32,7 +32,7 @@ int addressBookInsert(addressBookList *pBook, addressBookInfo* data);
 int addressBookSelect(addressBookList *pBook,  ELEMENTTYPE data);
 
 //删除人员信息
-int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data);
+int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data, char *val);
 
 //修改人员信息
 int addressBookmodifica(addressBookList *pBook, ELEMENTTYPE data);
