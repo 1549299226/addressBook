@@ -94,8 +94,8 @@ int main()
                 // choice = DELETE;
             break;
             case SEEK:                   
-                        //addressBookSelect(List, Info);
-                        addressBookOrderTravel(List, printStruct);
+                        addressBookSelect(List, Info);
+                        // addressBookOrderTravel(List, printStruct);
                 //choice = 0;
                 break;
             case DELETE:
