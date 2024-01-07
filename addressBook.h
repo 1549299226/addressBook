@@ -15,7 +15,7 @@ typedef struct addressBookInfo
 {
     char name[NAME_NUMBER];
     char sex;
-    int telephone[TELEPHONE_NUMBER];
+    char telephone[TELEPHONE_NUMBER];
     char email[EMAIL_NUMBER];
     char address[ADDRESS_NUMBER];
     char occupation[OCCUPATION_NUMBER];
@@ -23,10 +23,10 @@ typedef struct addressBookInfo
 } addressBookInfo;
 
 //创建人员信息
-addressBookInfo *createPersonInfo(char *name, char *sex,  int telephone, char *email, char *address, char *occupation);
+addressBookInfo *createPersonInfo(char *name, char *sex,  char * telephone, char *email, char *address, char *occupation);
 
 //插入人员信息
-int addressBookInsert(addressBookList *pBook, ELEMENTTYPE data);
+int addressBookInsert(addressBookList *pBook);
 
 //查看人员信息
 int addressBookSelect(addressBookList *pBook, ELEMENTTYPE data);
