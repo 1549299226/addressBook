@@ -49,33 +49,22 @@ int printStruct(void *arg)
 {
     int ret = 0;
     addressBookInfo* info = (addressBookInfo*)arg;
-    printf("name:%s\tsex:%c\ttelephone:%s\temail:%s\taddress:%s\toccupation:%s\n", 
+    printf("name:%s\tsex:%s\ttelephone:%s\temail:%s\taddress:%s\toccupation:%s\n", 
              info->name, info->sex, info->telephone, info->email, info->address, info->occupation);
     return ret;
 }
 
 int main()
 {
-    addressBookList *List;
+    addressBookList *List = NULL;
     // addressBookInfo * Info;
     // addressBookInfo **buffer = malloc(sizeof (addressBookInfo) * BUFFER_SIZE);
     
-    balanceBinarySearchTreeInit(&List,CompareName,printStruct);
-    /* 功能选项打印 */
-    {
-        int fd = open("./function.txt", O_RDWR);
-        if (fd == -1)
-        {
-            perror("open error");
-        }
-        char buffer[BUFFER_SIZE];
-        memset(buffer, 0, sizeof(buffer));
+    addressBookInit (&List,CompareName,printStruct);
+    addressBookInfo * Info;
+    createPersonInfo(Info,Info->name, Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
 
-        read(fd, buffer, sizeof(buffer) - 1);
-        printf("%s\n", buffer);
-
-        close(fd);
-    }
+    
 
     /* 功能选择 */   
     {
@@ -83,35 +72,56 @@ int main()
         //int count = 0;    
         while ( choice <= QUIT && choice >= 0)
         {
+            /* 功能选项打印 */
+            {
+                int fd = open("./function.txt", O_RDWR);
+                if (fd == -1)
+                {
+                    perror("open error");
+                }
+                char buffer[BUFFER_SIZE];
+                memset(buffer, 0, sizeof(buffer));
+                read(fd, buffer, sizeof(buffer) - 1);
+                printf("%s\n", buffer);
+
+                close(fd);
+            }
             printf("请输入选项\n");
             scanf("%d", &choice);
             switch (choice)
             {
-            case BUILT:
-                    addressBookInfo * Info;
-                    createPersonInfo(Info,Info->name, &Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
-                    createPersonInfo(Info, Info->name, Info->telephone, &Info->sex, Info->address, Info->occupation, Info->email);
+            case BUILT:    //新增联系人
+                    addressBookInfo * Info = (addressBookInfo*)malloc(sizeof(addressBookInfo));
+                    createPersonInfo(Info,Info->name, Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
+                    //createPersonInfo(Info, Info->name, Info->telephone, &Info->sex, Info->address, Info->occupation, Info->email);
                     printf("请输入姓名\n");
                     scanf("%s", Info->name);
+                    
+                    printf("请输入性别\n");
+                    scanf("%c",  Info->sex);
+                    
                     printf("请输入电话号码\n");
                     scanf("%s",  Info->telephone);
-                    printf("请输入性别\n");
-                    scanf("%s",  &Info->sex);
-                    printf("请输入地址\n");
-                    scanf("%s", Info->address);
-                    printf("请输入工作\n");
-                    scanf("%s", Info->occupation);
+                    
                     printf("请输入邮箱\n");
                     scanf("%s", Info->email);
+                    
+                    printf("请输入地址\n");
+                    scanf("%s", Info->address);
+                    
+                    printf("请输入工作\n");
+                    scanf("%s", Info->occupation);
+                    
                     addressBookInsert(List, Info);
                     Info++;
+                    system("clear");
                 // choice = DELETE;
             break;
-            case SEEK:                   
+            case SEEK:      //查找联系人     
                         addressBookSelect(List, Info);
                 //choice = 0;
                 break;
-            case DELETE:
+            case DELETE:   //删除联系人
                         printf("请输入需要删除的联系人姓名\n");
                         scanf("%s", Info->name);
                         addressBookDelete(List, Info, Info->name);
@@ -119,19 +129,26 @@ int main()
                         if (List->root->left == NULL &&List->root->right == NULL)
                         {
                             printf("通讯录没有人员\n");
-                            return 0;
+                            system("clear");
+                            break;
                         }
-                        
+                    system("clear");
                 break;
-            case MODIFY:
+            case MODIFY: //修改联系人
                         addressBookmodifica(List, Info);
+                        system("clear");
+
                 break;
-            case VIEW_ALL:
+            case VIEW_ALL:  //查看全部联系人
                         addressBookOrderTravel(List, printStruct);
+                        //system("clear");
+
                 break;
-            default:
+            default:   //退出通讯录
                 choice = QUIT;
-                break;
+                system("clear");
+                
+                return 0;
             }
         }
     }

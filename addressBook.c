@@ -26,7 +26,7 @@ enum CHOICE
 /* 判空 */
 static int judgeNull(addressBookList *pBook);
 /* 获取指定联系人的位置 */
-static addressBookNode * baseAppointValGetaddressBookNode(addressBookList *pBook, ELEMENTTYPE data);
+static void * baseAppointValGetaddressBookNode(addressBookList *pBook, ELEMENTTYPE data);
 
 
 /* 判空 */
@@ -39,21 +39,31 @@ static int judgeNull(addressBookList *pBook)
     }
     return 0;
 }
+int addressBookInit(addressBookList **pBook, int (*compareFunc)(void *val1, void *val2), int (*printFunc)(void *val))
+{
+    balanceBinarySearchTreeInit(pBook, compareFunc, printFunc);
+}
 
 /* 创建人员信息 */
 addressBookInfo *createPersonInfo(addressBookInfo *data, char *name, char *sex,  char* telephone, char *email, char *address, char *occupation)
 {
-    data = (addressBookInfo*)malloc(sizeof(addressBookInfo));
+    
     if (data == NULL)
     {
         return NULL;
     }
+    // data->name = (char *)malloc(NAME_NUMBER);
+    // data->telephone = (char *)malloc(TELEPHONE_NUMBER);
+    // data->email = (char *)malloc(EMAIL_NUMBER);
+    // data->address = (char *)malloc(ADDRESS_NUMBER);
+    // data->occupation = (char *)malloc(OCCUPATION_NUMBER);
+    //data = (addressBookInfo*)malloc(sizeof(addressBookInfo));
     strncpy(data->address,address,ADDRESS_NUMBER - 1);
     strncpy(data->email, email, EMAIL_NUMBER - 1);
     strncpy(data->name, name, NAME_NUMBER - 1);
     strncpy(data->telephone, telephone, TELEPHONE_NUMBER - 1);
     strncpy(data->occupation, occupation, OCCUPATION_NUMBER - 1);
-    strncpy(&data->sex, sex, sizeof(data->sex));
+    strncpy(data->sex, sex, SEX_NUMBER-1);
     
     
 }
@@ -68,6 +78,7 @@ int addressBookInsert(addressBookList *pBook, addressBookInfo* data)
     
     
     balanceBinarySearchTreeInsert(pBook,data);
+    printf("添加联系人成功\n\n");
 
     return 0;
 }
@@ -108,7 +119,7 @@ static int  baseAppointValGetaddressBookNode(addressBookList *pBook, addressBook
    
 }
 #endif
-static addressBookNode * baseAppointValGetaddressBookNode(addressBookList  *pBook, ELEMENTTYPE data)
+static void * baseAppointValGetaddressBookNode(addressBookList  *pBook, ELEMENTTYPE data)
 {
     addressBookNode * travelNode = pBook->root;
     int cmp = 0;
@@ -126,7 +137,7 @@ static addressBookNode * baseAppointValGetaddressBookNode(addressBookList  *pBoo
         else
         {
             /* 找到 */
-            return travelNode;
+            return travelNode->data;
         }
     }
     return NULL;
@@ -135,16 +146,26 @@ static addressBookNode * baseAppointValGetaddressBookNode(addressBookList  *pBoo
 int addressBookSelect(addressBookList *pBook,  ELEMENTTYPE data)
 {
     int ret = 0;
+    // if (data)
+    // {
+        
+    // }
+    
+    if (pBook == NULL)
+    {
+        printf("没有联系人\n");
+    }
+    
     addressBookInfo *info = data; 
     printf("请输入你要查找的姓名：\n");
     scanf("%s", info->name);
-    data = baseAppointValGetaddressBookNode(pBook, data);
-    if (data == NULL)
+    info = (addressBookInfo *)baseAppointValGetaddressBookNode(pBook, data);  //有问题    
+    if (info == NULL)
     {
         printf("查无此人\n");
-        return -1;
+        return 0;
     }
-    pBook->printFunc(data);
+    pBook->printFunc(info);
     return 0;
 }
 
@@ -152,6 +173,11 @@ int addressBookSelect(addressBookList *pBook,  ELEMENTTYPE data)
 int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data, char* val)
 {
     int ret = 0;
+       if (pBook == NULL)
+    {
+        printf("没有这个联系人\n");
+        return 0;
+    }
     addressBookInfo *info = data; 
     balanceBinarySearchTreeDelete(pBook, data);
 
@@ -171,7 +197,7 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
     {
         printf("查无此人\n");
         printf("输入该联系人的信息：\n");
-        createPersonInfo(info, info->name, &info->sex, info->telephone, info->email, info->address, info->occupation);
+        createPersonInfo(info, info->name, info->sex, info->telephone, info->email, info->address, info->occupation);
         addressBookInsert(pBook,info);
         return 0;
     }
@@ -206,10 +232,12 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
 
         case THREE:
             printf("请输入新的的性别：\n");
-            char  newSex; 
-            memset(&newSex, 0, ONE);
-            scanf("%c",&newSex);
-            strncpy(&info->sex, &newSex, sizeof(info->sex));
+            //char * newSex;
+            char  *newSex = malloc(SEX_NUMBER);
+            memset(newSex, 0, SEX_NUMBER);
+            //memset(newSex, 0, ONE);
+            scanf("%s",newSex);
+            strncpy(info->sex, newSex, sizeof(info->sex));
 
         
         break;
@@ -266,6 +294,12 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
 int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
 {
     int ret = 0;
+    if (pBook == NULL)
+    {
+        printf("没有联系人\n");
+        return 0;
+    }
+    
     balanceBinarySearchTreeInOrderTravel(pBook);
 
     return 0;

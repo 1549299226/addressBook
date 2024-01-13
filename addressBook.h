@@ -3,6 +3,7 @@
 
 #include "balanceBinarySearchTree .h"
 #define NAME_NUMBER 20
+#define SEX_NUMBER 2
 #define TELEPHONE_NUMBER 11
 #define EMAIL_NUMBER 30
 #define ADDRESS_NUMBER 100
@@ -14,13 +15,17 @@ typedef AVLTreeNode addressBookNode;
 typedef struct addressBookInfo
 {
     char name[NAME_NUMBER];
-    char sex;
-    char telephone[TELEPHONE_NUMBER];
     char email[EMAIL_NUMBER];
     char address[ADDRESS_NUMBER];
     char occupation[OCCUPATION_NUMBER];
+    char telephone[TELEPHONE_NUMBER];
+    char sex[SEX_NUMBER];
 
 } addressBookInfo;
+
+//初始化
+int addressBookInit(addressBookList **pBook, int (*compareFunc)(void *val1, void *val2), int (*printFunc)(void *val));
+
 
 //创建人员信息
 addressBookInfo *createPersonInfo(addressBookInfo *data,char *name, char *sex,  char * telephone, char *email, char *address, char *occupation);
