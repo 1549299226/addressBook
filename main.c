@@ -37,13 +37,15 @@ enum SECLET
 //保存到文件
 int saveFile(void *arg)
 {
-    int fd = open("addressBook.txt", O_RDWR | O_CREAT, 0644);
+    int fd = open("addressBook.txt", O_RDWR);
+
     if (fd == -1)
     {
         perror("open error");
         _exit(-1);
     }
     char buf[BUF];
+    memset(buf, 0, sizeof(buf));
     lseek(fd, 0, SEEK_END);
     addressBookInfo *Info = (addressBookInfo *)arg;
     sprintf(buf, "%s\n", Info->name);
@@ -53,9 +55,6 @@ int saveFile(void *arg)
     write(fd, buf, strlen(buf));
 
     sprintf(buf, "%s\n", Info->telephone);
-    write(fd, buf, strlen(buf));
-    
-    sprintf(buf, "%s\n", Info->name);
     write(fd, buf, strlen(buf));
     
     sprintf(buf, "%s\n", Info->occupation);
@@ -68,10 +67,64 @@ int saveFile(void *arg)
     write(fd, buf, strlen(buf));
     
 
-    return 0;
+    return fd;
    
 }
 
+int fileRead(void * arg)
+{
+    if (arg == NULL)
+    {
+        return -1;
+    }
+    
+    int fd = open("addressBook.txt", O_RDWR | O_CREAT, 0644);
+    char buf[BUF];
+    
+    struct stat st;
+    if (stat("example.txt", &st) == 0) 
+    {
+        if (st.st_size == 0)
+        {
+            return 0;
+        }
+    } 
+    else
+    {
+        perror("stat");
+    }
+   
+
+    addressBookInfo * Info = arg;
+    createPersonInfo(Info, Info->name, Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
+    lseek(fd, 0, SEEK_END);
+    
+    read(fd, buf, strlen(buf));
+    if (buf[0] == '\0')
+    {
+        return 0;//没有内容
+    }
+    
+    
+    strncpy(Info->name, buf, sizeof(buf) - 1);
+
+    read(fd, buf, strlen(buf));
+    strncpy(Info->sex, buf, sizeof(buf) - 1);
+
+    read(fd, buf, strlen(buf));
+    strncpy(Info->telephone, buf, sizeof(buf) - 1);
+
+    read(fd, buf, strlen(buf));
+    strncpy(Info->occupation, buf, sizeof(buf) - 1);
+
+    read(fd, buf, strlen(buf));
+    strncpy(Info->email, buf, sizeof(buf) - 1);
+
+    read(fd, buf, strlen(buf));
+    strncpy(Info->address, buf, sizeof(buf) - 1);
+
+    return fd;
+}
 
 
 int CompareName(void *arg1, void *arg2)
@@ -105,9 +158,11 @@ int main()
     addressBookInit (&List,CompareName,printStruct);
     addressBookInfo * Info;
     createPersonInfo(Info,Info->name, Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
-    int fd = 0;
+    int fd1 = 0;//功能页面
+    int fd2 = 0;//保存
+    int fd3 = 0;//加入到树中
+    //addressBookErgodicRead(List, Info, fileRead);  //将之前保存的数据拿出来
     
-
     /* 功能选择 */   
     {
         int choice = 0;    
@@ -116,18 +171,18 @@ int main()
         {
             /* 功能选项打印 */
             {
-                fd = open("./function.txt", O_RDWR | O_CREAT, 0644);
-                if (fd == -1)
+                fd1 = open("./function.txt", O_RDWR | O_CREAT, 0644);
+                if (fd1 == -1)
                 {
                     perror("open error");
                     _exit(-1);
                 }
                 char buffer[BUFFER_SIZE];
                 memset(buffer, 0, sizeof(buffer));
-                read(fd, buffer, sizeof(buffer) - 1);
+                read(fd1, buffer, sizeof(buffer) - 1);
                 printf("%s\n", buffer);
 
-                close(fd);
+                close(fd1);
             }
             printf("请输入选项\n");
             scanf("%d", &choice);
@@ -198,9 +253,10 @@ int main()
                 break;
 
             case SIX: //保存
-                        addressBookInOrderTravel(List, saveFile);
+                        fd2 = addressBookInOrderTravel(List, saveFile);
 
                         printf("保存成功\n");
+                        close(fd2);
                         sleep(2);
                         system("clear");
                           
@@ -210,14 +266,17 @@ int main()
 
             default:   //退出通讯录
                 choice = QUIT;
+                printf("正在退出。。。\n");
+                close(2);
                 system("clear");
-                
+                printf("退出成功\n");
+                close(1);
                 return 0;
                 //break;
             }
         }
     }
-
+    close(fd3);
     /* 保存 */
     {
         

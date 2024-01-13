@@ -25,11 +25,15 @@ enum CHOICE{
 };
 /* 判空 */
 static int judgeNull(addressBookList *pBook);
+
 /* 获取指定联系人的位置 */
 static void * baseAppointValGetaddressBookNode(addressBookList *pBook, ELEMENTTYPE data);
 
-//遍历
+//遍历写入
 static int inOrderTravel(addressBookList *pBook, addressBookNode *node, int (*printFunc)(ELEMENTTYPE));
+
+//遍历读取
+static int inOrderTravelRead(addressBookList *pBook, addressBookNode *node, void *data,int (*printFunc)(ELEMENTTYPE));
 
 /* 判空 */
 static int judgeNull(addressBookList *pBook)
@@ -297,12 +301,6 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
         
 
     }
-    
-    
-    
-    
-    
-
     return 0;
 }
 #endif
@@ -343,6 +341,37 @@ static int inOrderTravel(addressBookList *pBook, addressBookNode *node, int (*pr
 int addressBookInOrderTravel(addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
 {
     int ret = 0;
-    inOrderTravel(pBook, pBook->root, printFunc);
+    ret = inOrderTravel(pBook, pBook->root, printFunc);
     return ret;
 }
+
+
+//遍历写入
+static int inOrderTravelRead(addressBookList *pBook, addressBookNode *node, void *data,int (*printFunc)(ELEMENTTYPE))
+{
+    int ret = 0;
+    if(node == NULL)
+    {
+        return ret;
+    }
+    addressBookInfo *info = data;
+    /* 左子树 */
+    ret = inOrderTravel(pBook, node->left, printFunc);
+    /* 根节点 */
+    printFunc(node->data);
+    addressBookInsert(pBook, info);
+    /* 右子树 */
+    inOrderTravel(pBook, node->right, printFunc);
+    return ret;
+
+}
+
+//遍历读取
+int addressBookErgodicRead(addressBookList *pBook, void *data,int (*printFunc)(ELEMENTTYPE))
+{
+    int ret = 0;
+    ret = inOrderTravelRead(pBook, pBook->root,  data, printFunc);
+    return ret;
+
+}
+

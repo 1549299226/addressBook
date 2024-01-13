@@ -48,7 +48,8 @@ int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE
 //遍历保存
 int addressBookInOrderTravel(addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));
 
-
+//遍历读取
+int addressBookErgodicRead(addressBookList *pBook, void *data,int (*printFunc)(ELEMENTTYPE));
 
 
 #endif
