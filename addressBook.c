@@ -13,8 +13,7 @@ enum STATUS_CODE
     INVALID_ACCESS,
 };
 
-enum CHOICE
-{
+enum CHOICE{
     ONE = 1,
     TWO,
     THREE,
@@ -29,6 +28,8 @@ static int judgeNull(addressBookList *pBook);
 /* 获取指定联系人的位置 */
 static void * baseAppointValGetaddressBookNode(addressBookList *pBook, ELEMENTTYPE data);
 
+//遍历
+static int inOrderTravel(addressBookList *pBook, addressBookNode *node, int (*printFunc)(ELEMENTTYPE));
 
 /* 判空 */
 static int judgeNull(addressBookList *pBook)
@@ -318,4 +319,30 @@ int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE
     balanceBinarySearchTreeInOrderTravel(pBook);
 
     return 0;
+}
+
+
+//遍历
+static int inOrderTravel(addressBookList *pBook, addressBookNode *node, int (*printFunc)(ELEMENTTYPE))
+{
+    int ret = 0;
+    if(node == NULL)
+    {
+        return ret;
+    }
+    /* 左子树 */
+    inOrderTravel(pBook, node->left, printFunc);
+    /* 根节点 */
+    printFunc(node->data);
+    /* 右子树 */
+    inOrderTravel(pBook, node->right, printFunc);
+
+}
+
+
+int addressBookInOrderTravel(addressBookList *pBook, int (*printFunc)(ELEMENTTYPE))
+{
+    int ret = 0;
+    inOrderTravel(pBook, pBook->root, printFunc);
+    return ret;
 }

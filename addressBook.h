@@ -45,7 +45,8 @@ int addressBookmodifica(addressBookList *pBook, ELEMENTTYPE data);
 //顺序遍历
 int addressBookOrderTravel (addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));
 
-
+//遍历保存
+int addressBookInOrderTravel(addressBookList *pBook, int (*printFunc)(ELEMENTTYPE));
 
 
 

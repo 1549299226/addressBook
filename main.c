@@ -8,6 +8,7 @@
 #include "addressBook.h"
 #include"balanceBinarySearchTree .h"
 #define BUFFER_SIZE 1024
+#define BUF    128
 
 //通讯录结构体
 // typedef struct addressBook
@@ -29,8 +30,49 @@ enum SECLET
     DELETE,
     MODIFY,
     VIEW_ALL,
+    SIX,
     QUIT
 };
+
+//保存到文件
+int saveFile(void *arg)
+{
+    int fd = open("addressBook.txt", O_RDWR | O_CREAT, 0644);
+    if (fd == -1)
+    {
+        perror("open error");
+        _exit(-1);
+    }
+    char buf[BUF];
+    lseek(fd, 0, SEEK_END);
+    addressBookInfo *Info = (addressBookInfo *)arg;
+    sprintf(buf, "%s\n", Info->name);
+    write(fd, buf, strlen(buf));
+
+    sprintf(buf, "%s\n", Info->sex);
+    write(fd, buf, strlen(buf));
+
+    sprintf(buf, "%s\n", Info->telephone);
+    write(fd, buf, strlen(buf));
+    
+    sprintf(buf, "%s\n", Info->name);
+    write(fd, buf, strlen(buf));
+    
+    sprintf(buf, "%s\n", Info->occupation);
+    write(fd, buf, strlen(buf));
+
+    sprintf(buf, "%s\n", Info->email);
+    write(fd, buf, strlen(buf));
+
+    sprintf(buf, "%s\n", Info->address);
+    write(fd, buf, strlen(buf));
+    
+
+    return 0;
+   
+}
+
+
 
 int CompareName(void *arg1, void *arg2)
 {
@@ -78,6 +120,7 @@ int main()
                 if (fd == -1)
                 {
                     perror("open error");
+                    _exit(-1);
                 }
                 char buffer[BUFFER_SIZE];
                 memset(buffer, 0, sizeof(buffer));
@@ -91,9 +134,9 @@ int main()
             if (choice < BUILT || choice > QUIT)
             {
                 printf("没有该选项\n请重新选择");
-                sleep(3);
-                choice = 0;
+                //sleep(3);
                 printf("请输入选项\n");
+                //choice = 0;
                 scanf("%d", &choice);
             }
             
@@ -153,6 +196,18 @@ int main()
                         //system("clear");
 
                 break;
+
+            case SIX: //保存
+                        addressBookInOrderTravel(List, saveFile);
+
+                        printf("保存成功\n");
+                        sleep(2);
+                        system("clear");
+                          
+
+                
+                break;
+
             default:   //退出通讯录
                 choice = QUIT;
                 system("clear");
