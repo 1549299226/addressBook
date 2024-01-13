@@ -3,7 +3,7 @@
 
 #include "balanceBinarySearchTree .h"
 #define NAME_NUMBER 20
-#define SEX_NUMBER 2
+#define SEX_NUMBER 10
 #define TELEPHONE_NUMBER 11
 #define EMAIL_NUMBER 30
 #define ADDRESS_NUMBER 100

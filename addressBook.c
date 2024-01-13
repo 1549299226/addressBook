@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include<unistd.h>
 #include "addressBook.h"
 
 enum STATUS_CODE
@@ -71,16 +72,21 @@ addressBookInfo *createPersonInfo(addressBookInfo *data, char *name, char *sex, 
 /* 插入人员信息 */
 int addressBookInsert(addressBookList *pBook, addressBookInfo* data)
 {
-    int ret = 0;
+    int ret = -1;
 
     /* 判空 */
     judgeNull(pBook);
+    ret = balanceBinarySearchTreeInsert(pBook,data);
+    if (ret == 0)
+    {
+        sleep(3);
+        return 0;
+    }
     
-    
-    balanceBinarySearchTreeInsert(pBook,data);
     printf("添加联系人成功\n\n");
+    sleep(2);
 
-    return 0;
+    return ret;
 }
 
 #if 0
@@ -159,7 +165,7 @@ int addressBookSelect(addressBookList *pBook,  ELEMENTTYPE data)
     addressBookInfo *info = data; 
     printf("请输入你要查找的姓名：\n");
     scanf("%s", info->name);
-    info = (addressBookInfo *)baseAppointValGetaddressBookNode(pBook, data);  //有问题    
+    info = (addressBookInfo *)baseAppointValGetaddressBookNode(pBook, data);      
     if (info == NULL)
     {
         printf("查无此人\n");
@@ -179,7 +185,17 @@ int addressBookDelete(addressBookList *pBook, ELEMENTTYPE data, char* val)
         return 0;
     }
     addressBookInfo *info = data; 
+    info = (addressBookInfo *)baseAppointValGetaddressBookNode(pBook, data);     
+    if (info == NULL)
+    {
+        printf("没有这个联系人\n");
+        sleep(2);
+        return 0;
+    }
+    
     balanceBinarySearchTreeDelete(pBook, data);
+    printf("删除联系人成功\n");
+    sleep(2);
 
     return 0;
 }
@@ -192,13 +208,12 @@ int addressBookmodifica(addressBookList *pBook,ELEMENTTYPE data)
     addressBookInfo *info = data;
     printf("请输入要修改的人员姓名：\n");
     scanf("%s", info->name);
+    
     info = (addressBookInfo *)baseAppointValGetaddressBookNode(pBook, data);
        if (info == NULL)
     {
         printf("查无此人\n");
-        printf("输入该联系人的信息：\n");
-        createPersonInfo(info, info->name, info->sex, info->telephone, info->email, info->address, info->occupation);
-        addressBookInsert(pBook,info);
+        sleep(2);
         return 0;
     }
     int choice = 0;

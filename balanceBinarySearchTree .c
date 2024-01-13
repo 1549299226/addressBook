@@ -516,7 +516,7 @@ static int AVLTreeNodeIsBalanced(AVLTreeNode *node)
 /* 二叉搜索树的插入 */
 int balanceBinarySearchTreeInsert(BalanceBinarySearchTree *pBstree, ELEMENTTYPE val)
 {
-    int ret = 0;
+    int ret = 1;
     /* 空树 */
     if (pBstree->size == 0)
     {
@@ -550,7 +550,8 @@ int balanceBinarySearchTreeInsert(BalanceBinarySearchTree *pBstree, ELEMENTTYPE 
         else
         {
             /* 插入元素 = 遍历的结点 */
-            return ret;
+            printf("添加失败\n已有此联系人\n");
+            return 0;
         }
     }
 #if 0

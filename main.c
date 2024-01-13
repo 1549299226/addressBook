@@ -63,7 +63,7 @@ int main()
     addressBookInit (&List,CompareName,printStruct);
     addressBookInfo * Info;
     createPersonInfo(Info,Info->name, Info->sex, Info->telephone, Info->email, Info->address, Info->occupation);
-
+    int fd = 0;
     
 
     /* 功能选择 */   
@@ -74,7 +74,7 @@ int main()
         {
             /* 功能选项打印 */
             {
-                int fd = open("./function.txt", O_RDWR);
+                fd = open("./function.txt", O_RDWR | O_CREAT, 0644);
                 if (fd == -1)
                 {
                     perror("open error");
@@ -88,6 +88,15 @@ int main()
             }
             printf("请输入选项\n");
             scanf("%d", &choice);
+            if (choice < BUILT || choice > QUIT)
+            {
+                printf("没有该选项\n请重新选择");
+                sleep(3);
+                choice = 0;
+                printf("请输入选项\n");
+                scanf("%d", &choice);
+            }
+            
             switch (choice)
             {
             case BUILT:    //新增联系人
@@ -98,7 +107,7 @@ int main()
                     scanf("%s", Info->name);
                     
                     printf("请输入性别\n");
-                    scanf("%c",  Info->sex);
+                    scanf("%s",  Info->sex);
                     
                     printf("请输入电话号码\n");
                     scanf("%s",  Info->telephone);
@@ -124,7 +133,6 @@ int main()
             case DELETE:   //删除联系人
                         printf("请输入需要删除的联系人姓名\n");
                         scanf("%s", Info->name);
-                        addressBookDelete(List, Info, Info->name);
                         //count--;
                         if (List->root->left == NULL &&List->root->right == NULL)
                         {
@@ -132,6 +140,7 @@ int main()
                             system("clear");
                             break;
                         }
+                        addressBookDelete(List, Info, Info->name);
                     system("clear");
                 break;
             case MODIFY: //修改联系人
@@ -149,6 +158,7 @@ int main()
                 system("clear");
                 
                 return 0;
+                //break;
             }
         }
     }
